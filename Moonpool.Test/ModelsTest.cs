@@ -7,7 +7,7 @@ namespace Moonpool.Test
         [Fact]
         public void Question_all_correct()
         {
-            Question q = new Question { answer = "3" };
+            Question q = new() { answer = "3" };
             q.ReceiveSolution("3");
             Assert.Equal(100, q.GetCorrectRate());
         }
@@ -15,7 +15,7 @@ namespace Moonpool.Test
         [Fact]
         public void Question_half_correct()
         {
-            Question q = new Question { answer = "3" };
+            Question q = new() { answer = "3" };
             q.ReceiveSolution("2");
             q.ReceiveSolution("3");
             var rate = q.GetCorrectRate();
@@ -25,7 +25,7 @@ namespace Moonpool.Test
         [Fact]
         public void Question_one_third_correct()
         {
-            Question q = new Question { answer = "3" };
+            Question q = new() { answer = "3" };
             q.ReceiveSolution("1");
             q.ReceiveSolution("2");
             q.ReceiveSolution("3");
@@ -35,7 +35,7 @@ namespace Moonpool.Test
         [Fact]
         public void Weight_1_with_all_correct()
         {
-            Question q = new Question { answer = "3", weight = 1 };
+            Question q = new() { answer = "3", weight = 1 };
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");

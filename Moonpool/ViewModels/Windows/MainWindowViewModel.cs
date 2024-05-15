@@ -6,7 +6,7 @@ namespace Moonpool.ViewModels.Windows
     public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _applicationTitle = "WPF UI - Moonpool";
+        private static string _applicationTitle = (string)App.Current.Resources["Title"];
 
         [ObservableProperty]
         private ObservableCollection<object> _menuItems = new()

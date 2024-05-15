@@ -12,7 +12,7 @@ namespace Moonpool.Models
 {
     public class Question
     {
-        public Image? image;
+        public BitmapImage? image;
         public string? answer;
         private uint totalSolvedNumber;
         private uint numberOfCorrect;
@@ -45,7 +45,7 @@ namespace Moonpool.Models
             return hashString;
         }
 
-        private static Image GetImage(byte[] imageBytes)
+        private static BitmapImage GetImage(byte[] imageBytes)
         {
             BitmapImage bitmapImage = new();
             bitmapImage.BeginInit();
@@ -53,7 +53,7 @@ namespace Moonpool.Models
             bitmapImage.StreamSource = new MemoryStream(imageBytes);
             bitmapImage.EndInit();
 
-            return new Image { Source = bitmapImage };
+            return bitmapImage;
         }
 
         public void SetImage(string imagePath)

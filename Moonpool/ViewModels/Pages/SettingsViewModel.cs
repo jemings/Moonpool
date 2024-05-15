@@ -1,4 +1,5 @@
-﻿using Wpf.Ui.Appearance;
+﻿using System.Configuration;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace Moonpool.ViewModels.Pages
@@ -24,7 +25,7 @@ namespace Moonpool.ViewModels.Pages
         private void InitializeViewModel()
         {
             CurrentTheme = ApplicationThemeManager.GetAppTheme();
-            AppVersion = $"UiDesktopApp1 - {GetAssemblyVersion()}";
+            AppVersion = $"{GetTitle()} - {GetAssemblyVersion()}";
 
             _isInitialized = true;
         }
@@ -35,9 +36,15 @@ namespace Moonpool.ViewModels.Pages
                 ?? String.Empty;
         }
 
+        private string GetTitle()
+        {
+            return (string)App.Current.Resources["Title"];
+        }
+
         [RelayCommand]
         private void OnChangeTheme(string parameter)
         {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             switch (parameter)
             {
                 case "theme_light":
@@ -46,18 +53,30 @@ namespace Moonpool.ViewModels.Pages
 
                     ApplicationThemeManager.Apply(ApplicationTheme.Light);
                     CurrentTheme = ApplicationTheme.Light;
-
+                    config.AppSettings.Settings["Theme"].Value = "Light";
                     break;
 
-                default:
+                case "theme_dark":
                     if (CurrentTheme == ApplicationTheme.Dark)
                         break;
 
                     ApplicationThemeManager.Apply(ApplicationTheme.Dark);
                     CurrentTheme = ApplicationTheme.Dark;
+                    config.AppSettings.Settings["Theme"].Value = "Dark";
+                    break;
 
+                case "theme_highcontrast":
+                    if (CurrentTheme == ApplicationTheme.HighContrast)
+                        break;
+
+                    ApplicationThemeManager.Apply(ApplicationTheme.HighContrast);
+                    CurrentTheme = ApplicationTheme.HighContrast;
+                    config.AppSettings.Settings["Theme"].Value = "HighContrast";
                     break;
             }
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+            Console.WriteLine(config.AppSettings.Settings["Theme"].Value);
         }
     }
 }

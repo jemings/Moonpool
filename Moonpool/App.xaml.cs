@@ -9,7 +9,9 @@ using Moonpool.Views.Windows;
 using System.IO;
 using System.Reflection;
 using System.Windows.Threading;
+using System.Configuration;
 using Wpf.Ui;
+using Wpf.Ui.Appearance;
 
 namespace Moonpool
 {
@@ -78,6 +80,27 @@ namespace Moonpool
         private void OnStartup(object sender, StartupEventArgs e)
         {
             _host.Start();
+            LoadSettings();
+        }
+
+        private void LoadSettings()
+        {
+            var themeSetting = System.Configuration.ConfigurationManager.AppSettings["Theme"];
+            switch (themeSetting)
+            {
+                case "Light":
+                    ApplicationThemeManager.Apply(ApplicationTheme.Light);
+                    break;
+                case "Dark":
+                    ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+                    break;
+                case "HighContrast":
+                    ApplicationThemeManager.Apply(ApplicationTheme.HighContrast);
+                    break;
+                default:
+                    MessageBox.Show($"Unknown Theme: ${themeSetting}");
+                    break;
+            }
         }
 
         /// <summary>
