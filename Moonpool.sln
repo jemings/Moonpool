@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moonpool", "Moonpool\Moonpool.csproj", "{359D0308-38EF-4E04-9464-FDF4607564F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moonpool.Test", "Moonpool.Test\Moonpool.Test.csproj", "{578F37CA-13D6-491E-B84F-5EB1465EB117}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{359D0308-38EF-4E04-9464-FDF4607564F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{359D0308-38EF-4E04-9464-FDF4607564F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{359D0308-38EF-4E04-9464-FDF4607564F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{359D0308-38EF-4E04-9464-FDF4607564F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{578F37CA-13D6-491E-B84F-5EB1465EB117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578F37CA-13D6-491E-B84F-5EB1465EB117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578F37CA-13D6-491E-B84F-5EB1465EB117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578F37CA-13D6-491E-B84F-5EB1465EB117}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {92BE8707-CFB3-4BB0-8083-824872524FD2}
+	EndGlobalSection
+EndGlobal
