@@ -25,11 +25,9 @@ namespace Moonpool.Models
             using (FileStream fileStream = new(imagePath, FileMode.Open, FileAccess.Read))
             using (BufferedStream bufferedStream = new(fileStream))
             {
-                using (MemoryStream memoryStream = new())
-                {
-                    bufferedStream.CopyTo(memoryStream);
-                    imageBytes = memoryStream.ToArray();
-                }
+                using MemoryStream memoryStream = new();
+                bufferedStream.CopyTo(memoryStream);
+                imageBytes = memoryStream.ToArray();
             }
             return imageBytes;
         }
@@ -63,15 +61,9 @@ namespace Moonpool.Models
             image = GetImage(imageBytes);
         }
 
-        public decimal GetCorrectRate()
-        {
-            return ((decimal)numberOfCorrect/totalSolvedNumber) * 100;
-        }
+        public decimal CorrectRate => (decimal)numberOfCorrect / totalSolvedNumber * 100;
 
-        public decimal GetWeightedRate()
-        {
-            return GetCorrectRate() * weight;
-        }
+        public decimal WeightedRate => CorrectRate * weight;
 
         public void ReceiveSolution(string solution)
         {

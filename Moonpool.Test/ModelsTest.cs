@@ -9,7 +9,7 @@ namespace Moonpool.Test
         {
             Question q = new() { answer = "3" };
             q.ReceiveSolution("3");
-            Assert.Equal(100, q.GetCorrectRate());
+            Assert.Equal(100, q.CorrectRate);
         }
 
         [Fact]
@@ -18,7 +18,7 @@ namespace Moonpool.Test
             Question q = new() { answer = "3" };
             q.ReceiveSolution("2");
             q.ReceiveSolution("3");
-            var rate = q.GetCorrectRate();
+            var rate = q.CorrectRate;
             Assert.Equal(50, rate);
         }
 
@@ -29,7 +29,7 @@ namespace Moonpool.Test
             q.ReceiveSolution("1");
             q.ReceiveSolution("2");
             q.ReceiveSolution("3");
-            Assert.Equal(((decimal)1 / 3) * 100, q.GetCorrectRate());
+            Assert.Equal(((decimal)1 / 3) * 100, q.CorrectRate);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Moonpool.Test
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
-            Assert.Equal(100, q.GetWeightedRate());
+            Assert.Equal(100, q.WeightedRate);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Moonpool.Test
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
-            Assert.Equal(30, q.GetWeightedRate());
+            Assert.Equal(30, q.WeightedRate);
         }
     }
 }

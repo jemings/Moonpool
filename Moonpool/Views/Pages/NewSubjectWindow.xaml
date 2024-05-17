@@ -1,0 +1,23 @@
+﻿<Window x:Class="Moonpool.Views.Pages.NewSubjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Moonpool.Views.Pages"
+        mc:Ignorable="d"
+        Title="New Subject" Height="150" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="NewSubjectTextBox" Width="200" Margin="10"
+                 TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="0"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Button Content="Add" Width="100" Height="30" Margin="5" Click="AddButton_Click"/>
+            <Button Content="Cancel" Width="100" Height="30" Margin="5" Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

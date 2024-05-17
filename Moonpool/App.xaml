@@ -9,7 +9,7 @@
     Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
-            <system:String x:Key="Title">Moonpool</system:String>
+            <system:String x:Key="Title">Moonpool for YERIN</system:String>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary />
                 <ui:ControlsDictionary />
