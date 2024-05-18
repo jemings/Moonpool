@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Moonpool.Views.Pages"
+    xmlns:vm="clr-namespace:Moonpool.ViewModels.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="DashboardPage"
@@ -15,6 +16,10 @@
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:SubjectViewModel/>
+    </Page.DataContext>
 
     <StackPanel>
         <Grid VerticalAlignment="Top">
@@ -35,10 +40,24 @@
             Text="{Binding ViewModel.Counter, Mode=OneWay}" />
         </Grid>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
             <ComboBox x:Name="SubjectsComboBox" Width="200" Margin="10"
-                  SelectionChanged="SubjectsComboBox_SelectionChanged"
-                  MouseRightButtonUp="SubjectsComboBox_MouseRightButtonUp"
-                  VerticalContentAlignment="Center" />
+                  VerticalContentAlignment="Center" Grid.Row="0" Grid.Column="0"
+                  ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}"/>
+
+            <ComboBox x:Name="DetailsComboBox" Width="200" Margin="10"
+                  VerticalContentAlignment="Center" Grid.Row="0" Grid.Column="1"
+                  ItemsSource="{Binding Details}" SelectedItem="{Binding SelectedDetail}"/>
         </Grid>
     </StackPanel>
 </Page>

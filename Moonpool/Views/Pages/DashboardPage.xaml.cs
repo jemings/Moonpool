@@ -18,9 +18,6 @@ namespace Moonpool.Views.Pages
             DataContext = this;
 
             InitializeComponent();
-
-            LoadSubjects();
-            SubjectsComboBox.Items.Add("New");  // Add "New" item
         }
 
         private void LoadSubjects()

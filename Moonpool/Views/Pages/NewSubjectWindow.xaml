@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Moonpool.Views.Pages"
         mc:Ignorable="d"
-        Title="New Subject" Height="150" Width="300">
+        Title="New Subject" Height="150" Width="250">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="NewSubjectTextBox" Width="200" Margin="10"
+        <TextBox x:Name="NewSubjectTextBox" Margin="10"
                  TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.Row="0"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
