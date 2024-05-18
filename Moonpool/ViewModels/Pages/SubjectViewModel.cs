@@ -77,7 +77,7 @@ namespace Moonpool.ViewModels.Pages
                         Subjects.Add(value!); // null 확인 후 강제 언래핑
                     }
                 }
-                Subjects.Add("New");
+                //Subjects.Add("New");
             }
         }
 
@@ -113,7 +113,6 @@ namespace Moonpool.ViewModels.Pages
                 {
                     Subjects.Insert(Subjects.Count - 1, newSubject!);
                     AddNewEntryToConfig("Subjects", newSubject!);
-                    AddNewConfigSection(newSubject!);
                     SelectedSubject = newSubject;
 
                     // 새로 추가된 Subject에 대한 Details를 초기화합니다.
@@ -130,8 +129,8 @@ namespace Moonpool.ViewModels.Pages
                 var newDetail = newSubjectWindow.NewSubject;
                 if (!string.IsNullOrEmpty(newDetail) && !string.IsNullOrEmpty(SelectedSubject))
                 {
-                    Details?.Insert(Details.Count - 1, newDetail);
-                    AddNewEntryToConfig(SelectedSubject, newDetail);
+                    Details.Insert(Details.Count - 1, newDetail!);
+                    AddNewEntryToConfig(SelectedSubject!, newDetail!);
                     SelectedDetail = newDetail;
                 }
             }
@@ -150,47 +149,10 @@ namespace Moonpool.ViewModels.Pages
                 addElement.SetAttribute("key", sectionNode.ChildNodes.Count.ToString());
                 addElement.SetAttribute("value", newValue);
                 sectionNode.AppendChild(addElement);
-            }
-            else
-            {
-                var newSection = xmlDoc.CreateElement(sectionName);
-                var addElement = xmlDoc.CreateElement("add");
-                addElement.SetAttribute("key", "0");
-                addElement.SetAttribute("value", newValue);
-                newSection.AppendChild(addElement);
-
-                xmlDoc.SelectSingleNode("//configuration")?.AppendChild(newSection);
-
-                var configSections = xmlDoc.SelectSingleNode("//configSections");
-                var newSectionElement = xmlDoc.CreateElement("section");
-                newSectionElement.SetAttribute("name", sectionName);
-                newSectionElement.SetAttribute("type", "System.Configuration.NameValueSectionHandler, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
-                configSections?.AppendChild(newSectionElement);
-            }
-
-            xmlDoc.Save(config.FilePath);
-            ConfigurationManager.RefreshSection("Subjects");
-            ConfigurationManager.RefreshSection(sectionName);
-        }
-
-        private void AddNewConfigSection(string newSectionName)
-        {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var xmlDoc = new XmlDocument();
-            xmlDoc.Load(config.FilePath);
-
-            var configSections = xmlDoc.SelectSingleNode("//configSections");
-            if (configSections != null)
-            {
-                var newSection = xmlDoc.CreateElement("section");
-                newSection.SetAttribute("name", newSectionName);
-                newSection.SetAttribute("type", "System.Configuration.NameValueSectionHandler, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
-                configSections.AppendChild(newSection);
 
                 xmlDoc.Save(config.FilePath);
-                ConfigurationManager.RefreshSection("configSections");
+                ConfigurationManager.RefreshSection(sectionName);
             }
         }
-
     }
 }
