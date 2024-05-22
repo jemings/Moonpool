@@ -7,7 +7,7 @@ namespace Moonpool.Test
         [Fact]
         public void Image_loading()
         {
-            Question q = new();
+            Problem q = new();
 
             q.SetImage("..\\..\\..\\bananas.jpg");
 

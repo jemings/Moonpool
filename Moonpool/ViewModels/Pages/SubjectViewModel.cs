@@ -14,12 +14,13 @@ namespace Moonpool.ViewModels.Pages
 {
     public partial class SubjectViewModel : ObservableObject
     {
+        private SubjectList subjectList = new();
         private string? selectedSubject;
         private string? selectedDetail;
 
         public SubjectViewModel()
         {
-            Subjects = new ObservableCollection<string>();
+            Subjects = subjectList.Name;
             Details = new ObservableCollection<string>();
             LoadSubjects();
         }

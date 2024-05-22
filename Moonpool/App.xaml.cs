@@ -79,8 +79,22 @@ namespace Moonpool
         /// </summary>
         private void OnStartup(object sender, StartupEventArgs e)
         {
+            MakeDatabaseFolder();
             _host.Start();
             LoadSettings();
+        }
+
+        public static string? DatabasePath { get; set; }
+
+        private void MakeDatabaseFolder()
+        {
+            string executablePath = Assembly.GetExecutingAssembly().Location;
+            string? directoryPath = Path.GetDirectoryName(executablePath);
+            DatabasePath = Path.Combine(directoryPath!, "database");
+            if (!Directory.Exists(DatabasePath))
+            {
+                Directory.CreateDirectory(DatabasePath);
+            }
         }
 
         private void LoadSettings()

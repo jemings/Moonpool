@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 
 namespace Moonpool.Models
 {
-    public class Question
+    public class Problem
     {
         public BitmapImage? image;
         public string? answer;
@@ -19,7 +19,7 @@ namespace Moonpool.Models
         public string? imageHash;
         public decimal weight;
 
-        private static byte[] GetImageByte(string imagePath)
+        public static byte[] GetImageByte(string imagePath)
         {
             byte[] imageBytes;
             using (FileStream fileStream = new(imagePath, FileMode.Open, FileAccess.Read))
@@ -32,7 +32,7 @@ namespace Moonpool.Models
             return imageBytes;
         }
 
-        private static string GetImageHash(byte[] imageBytes)
+        public static string GetImageHash(byte[] imageBytes)
         {
             string hashString;
             using (var sha256 = SHA256.Create())
@@ -61,9 +61,19 @@ namespace Moonpool.Models
             image = GetImage(imageBytes);
         }
 
-        public decimal CorrectRate => (decimal)numberOfCorrect / totalSolvedNumber * 100;
+        public decimal CorrectRate => totalSolvedNumber == 0 ? 0 : (decimal)numberOfCorrect / totalSolvedNumber * 100;
 
         public decimal WeightedRate => CorrectRate * weight;
+
+        public void SetAnswer(string newAnswer)
+        {
+            if (answer != newAnswer)
+            {
+                answer = newAnswer;
+                totalSolvedNumber = 0;
+                numberOfCorrect = 0;
+            }
+        }
 
         public void ReceiveSolution(string solution)
         {

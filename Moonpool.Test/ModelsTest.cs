@@ -5,17 +5,34 @@ namespace Moonpool.Test
     public class ModelsTest
     {
         [Fact]
-        public void Question_all_correct()
+        public void Problem_never_solved()
         {
-            Question q = new() { answer = "3" };
+            Problem q = new() { answer = "3" };
+            Assert.Equal(0, q.CorrectRate);
+        }
+
+        [Fact]
+        public void Problem_all_correct()
+        {
+            Problem q = new() { answer = "3" };
             q.ReceiveSolution("3");
             Assert.Equal(100, q.CorrectRate);
         }
 
         [Fact]
-        public void Question_half_correct()
+        public void Problem_answer_changed()
         {
-            Question q = new() { answer = "3" };
+            Problem q = new() { answer = "3" };
+            q.ReceiveSolution("3");
+            q.ReceiveSolution("3");
+            q.SetAnswer("2");
+            Assert.Equal(0, q.CorrectRate);
+        }
+
+        [Fact]
+        public void Problem_half_correct()
+        {
+            Problem q = new() { answer = "3" };
             q.ReceiveSolution("2");
             q.ReceiveSolution("3");
             var rate = q.CorrectRate;
@@ -23,9 +40,9 @@ namespace Moonpool.Test
         }
 
         [Fact]
-        public void Question_one_third_correct()
+        public void Problem_one_third_correct()
         {
-            Question q = new() { answer = "3" };
+            Problem q = new() { answer = "3" };
             q.ReceiveSolution("1");
             q.ReceiveSolution("2");
             q.ReceiveSolution("3");
@@ -35,7 +52,7 @@ namespace Moonpool.Test
         [Fact]
         public void Weight_1_with_all_correct()
         {
-            Question q = new() { answer = "3", weight = 1 };
+            Problem q = new() { answer = "3", weight = 1 };
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
@@ -45,7 +62,7 @@ namespace Moonpool.Test
         [Fact]
         public void Weight_dot_3_with_all_correct()
         {
-            Question q = new() { answer = "3", weight = (decimal)0.3 };
+            Problem q = new() { answer = "3", weight = (decimal)0.3 };
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");
             q.ReceiveSolution("3");

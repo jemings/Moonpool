@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Moonpool.Models
 {
-    public partial class Subject() : ObservableObject
+    public partial class SubjectList : ObservableObject
     {
-        [ObservableProperty]
-        private string? name;
+        public ObservableCollection<string> Name = [];
 
         [ObservableProperty]
-        public IList<Chapter> chapters = [];
+        private IList<Subject> subjects = [];
     }
 }

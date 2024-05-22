@@ -1,8 +1,12 @@
-﻿using Moonpool.ViewModels.Pages;
+﻿using Microsoft.Win32;
+using Moonpool.Models;
+using Moonpool.ViewModels.Pages;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Xml;
 using Wpf.Ui.Controls;
 
@@ -18,78 +22,6 @@ namespace Moonpool.Views.Pages
             DataContext = this;
 
             InitializeComponent();
-        }
-
-        private void LoadSubjects()
-        {
-            var subjectsSection = ConfigurationManager.GetSection("Subjects") as NameValueCollection;
-            if (subjectsSection != null)
-            {
-                string?[] array = subjectsSection.AllKeys ?? Array.Empty<string>();
-                for (int i = 0; i < array.Length; i++)
-                {
-                    string? key = array[i];
-                    if (key != null)
-                    {
-                        SubjectsComboBox.Items.Add(subjectsSection[key]);
-                    }
-                }
-            }
-        }
-        private void SubjectsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (SubjectsComboBox.SelectedItem != null && SubjectsComboBox.SelectedItem.ToString() == "New")
-            {
-                var newSubjectWindow = new NewSubjectWindow();
-                if (newSubjectWindow.ShowDialog() == true)
-                {
-                    var newSubject = newSubjectWindow.NewSubject;
-                    if (!string.IsNullOrEmpty(newSubject))
-                    {
-                        // Add new subject to ComboBox
-                        SubjectsComboBox.Items.Insert(SubjectsComboBox.Items.Count - 1, newSubject);
-                        SubjectsComboBox.SelectedItem = newSubject;
-                        // Add new subject to App.config
-                        AddSubjectToConfig(newSubject);
-                    }
-                }
-                else
-                {
-                    // Reset selection if dialog is cancelled
-                    SubjectsComboBox.SelectedIndex = -1;
-                }
-            }
-        }
-
-        private void AddSubjectToConfig(string newSubject)
-        {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var configFilePath = config.FilePath;
-
-            var xmlDoc = new XmlDocument();
-            xmlDoc.Load(configFilePath);
-
-            XmlNode? configurationNode = xmlDoc.SelectSingleNode("configuration");
-            if (configurationNode == null)
-            {
-                throw new InvalidOperationException("Configuration node not found in the config file.");
-            }
-
-            XmlNode? subjectsNode = configurationNode.SelectSingleNode("Subjects");
-            if (subjectsNode == null)
-            {
-                subjectsNode = xmlDoc.CreateElement("Subjects");
-                configurationNode.AppendChild(subjectsNode);
-            }
-
-            int newKey = subjectsNode.ChildNodes.Count;
-            XmlElement newElem = xmlDoc.CreateElement("add");
-            newElem.SetAttribute("key", newKey.ToString());
-            newElem.SetAttribute("value", newSubject);
-            subjectsNode.AppendChild(newElem);
-
-            xmlDoc.Save(configFilePath);
-            ConfigurationManager.RefreshSection("Subjects");
         }
 
         private void SubjectsComboBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -128,6 +60,53 @@ namespace Moonpool.Views.Pages
                 xmlDoc.Save(configFilePath);
                 ConfigurationManager.RefreshSection("Subjects");
             }
+        }
+
+        private void ImageBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                DisplayImageAndHash(filePath);
+            }
+        }
+
+        private void DisplayImageAndHash(string filePath)
+        {
+            var hash = Problem.GetImageHash(Problem.GetImageByte(filePath));
+            BitmapImage bitmap = new();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(filePath);
+            bitmap.DecodePixelWidth = 30;  // 작은 크기로 이미지 디코딩
+            bitmap.EndInit();
+
+            var image = new System.Windows.Controls.Image();
+            image.Source = bitmap;
+            image.Width = 30;
+            image.Height = 30;
+
+            ImageBox.Document.Blocks.Clear();
+            InlineUIContainer container = new(image);
+            Paragraph paragraph = new(container);
+            paragraph.Inlines.Add(new Run(" " + hash));
+            ImageBox.Document.Blocks.Add(paragraph);
+        }
+
+        private void ImageBox_Drop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void CommandSave_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void CommandSave_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
     }
 }
