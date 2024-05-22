@@ -101,12 +101,20 @@ namespace Moonpool.Views.Pages
 
         private void CommandSave_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            Console.WriteLine("Save");
+        }
 
+        private bool IsImageBoxEmpty()
+        {
+            if (ImageBox.Document.Blocks.Count == 0) return true;
+            TextPointer startPointer = ImageBox.Document.ContentStart.GetNextInsertionPosition(LogicalDirection.Forward);
+            TextPointer endPointer = ImageBox.Document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward);
+            return startPointer.CompareTo(endPointer) == 0;
         }
 
         private void CommandSave_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = !string.IsNullOrEmpty(SubjectsComboBox.Text) && !string.IsNullOrEmpty(DetailsComboBox.Text) && !IsImageBoxEmpty() && !string.IsNullOrEmpty(AnswerBox.Text);
         }
     }
 }
