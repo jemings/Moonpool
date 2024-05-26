@@ -9,14 +9,13 @@ namespace Moonpool.ViewModels.Pages
 {
     public partial class DashboardViewModel : ObservableObject
     {
-        private SubjectList subjectList = new();
         private string? selectedSubject;
         private string? selectedDetail;
 
         public DashboardViewModel()
         {
-            Subjects = subjectList.Name;
-            Details = new ObservableCollection<string>();
+            Subjects = new ObservableCollection<string>();
+            Chapters = new ObservableCollection<string>();
             LoadSubjects();
         }
 
@@ -24,7 +23,7 @@ namespace Moonpool.ViewModels.Pages
         private ObservableCollection<string> subjects;
 
         [ObservableProperty]
-        private ObservableCollection<string> details;
+        private ObservableCollection<string> chapters;
 
         public string? SelectedSubject
         {
@@ -39,7 +38,7 @@ namespace Moonpool.ViewModels.Pages
                     }
                     else if (selectedSubject != null)
                     {
-                        LoadDetails(selectedSubject);
+                        LoadChapters(selectedSubject);
                     }
                 }
             }
@@ -77,9 +76,9 @@ namespace Moonpool.ViewModels.Pages
             }
         }
 
-        private void LoadDetails(string subject)
+        private void LoadChapters(string subject)
         {
-            Details.Clear();
+            Chapters.Clear();
             if (ConfigurationManager.GetSection(subject) is NameValueCollection section)
             {
                 foreach (var key in section.AllKeys)
@@ -87,15 +86,15 @@ namespace Moonpool.ViewModels.Pages
                     var value = section[key];
                     if (!string.IsNullOrEmpty(value))
                     {
-                        Details.Add(value!); // null 확인 후 강제 언래핑
+                        Chapters.Add(value!); // null 확인 후 강제 언래핑
                     }
                 }
-                Details.Add("New");
+                Chapters.Add("New");
             }
             else
             {
-                // 새로 추가된 Subject에 대해 Details를 초기화하고 "New"를 추가합니다.
-                Details.Add("New");
+                // 새로 추가된 Subject에 대해 Chapters를 초기화하고 "New"를 추가합니다.
+                Chapters.Add("New");
             }
         }
 
@@ -111,8 +110,8 @@ namespace Moonpool.ViewModels.Pages
                     AddNewEntryToConfig("Subjects", newSubject!);
                     SelectedSubject = newSubject;
 
-                    // 새로 추가된 Subject에 대한 Details를 초기화합니다.
-                    LoadDetails(newSubject);
+                    // 새로 추가된 Subject에 대한 Chapters를 초기화합니다.
+                    LoadChapters(newSubject);
                 }
             }
         }
@@ -125,7 +124,7 @@ namespace Moonpool.ViewModels.Pages
                 var newDetail = newSubjectWindow.NewSubject;
                 if (!string.IsNullOrEmpty(newDetail) && !string.IsNullOrEmpty(SelectedSubject))
                 {
-                    Details.Insert(Details.Count - 1, newDetail!);
+                    Chapters.Insert(Chapters.Count - 1, newDetail!);
                     AddNewEntryToConfig(SelectedSubject!, newDetail!);
                     SelectedDetail = newDetail;
                 }

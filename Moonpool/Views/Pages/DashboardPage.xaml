@@ -53,9 +53,9 @@
                   VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="0"
                   ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}"/>
 
-            <ComboBox x:Name="DetailsComboBox" Width="200" Margin="10"
+            <ComboBox x:Name="ChaptersComboBox" Width="200" Margin="10"
                   VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="1"
-                  ItemsSource="{Binding Details}" SelectedItem="{Binding SelectedDetail}"/>
+                  ItemsSource="{Binding Chapters}" SelectedItem="{Binding SelectedDetail}"/>
 
             <ui:RichTextBox x:Name="ImageBox" Grid.Row="1" Grid.Column="2" Margin="10"
                      IsReadOnly="True" MouseDoubleClick="ImageBox_MouseDoubleClick"

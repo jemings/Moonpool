@@ -102,6 +102,10 @@ namespace Moonpool.Views.Pages
         private void CommandSave_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Console.WriteLine("Save");
+
+            Console.WriteLine($"{SubjectsComboBox.Text}");
+            Console.WriteLine($"{ChaptersComboBox.Text}");
+            Console.WriteLine($"{AnswerBox.Text}");
         }
 
         private bool IsImageBoxEmpty()
@@ -114,7 +118,7 @@ namespace Moonpool.Views.Pages
 
         private void CommandSave_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !string.IsNullOrEmpty(SubjectsComboBox.Text) && !string.IsNullOrEmpty(DetailsComboBox.Text) && !IsImageBoxEmpty() && !string.IsNullOrEmpty(AnswerBox.Text);
+            e.CanExecute = !string.IsNullOrEmpty(SubjectsComboBox.Text) && !string.IsNullOrEmpty(ChaptersComboBox.Text) && !IsImageBoxEmpty() && !string.IsNullOrEmpty(AnswerBox.Text);
         }
     }
 }
