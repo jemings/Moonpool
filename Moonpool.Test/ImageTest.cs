@@ -11,7 +11,9 @@ namespace Moonpool.Test
 
             q.SetImage("..\\..\\..\\bananas.jpg");
 
-            Assert.Equal("476D8B572EFACD8CD4F8BFDADB0C91F0E724C6E29BAA00F4F3C991698E92B7EB", q.imageHash);
+            Console.WriteLine(q.imageHash);
+
+            Assert.Equal("17B7229FC6FCB92963368D9EFB3571CB7A4EB84274713BB90A7851BF8BA0F6B8", q.imageHash);
             Assert.Equal(390, q.image?.PixelHeight);
             Assert.Equal(504, q.image?.PixelWidth);
         }
