@@ -1,8 +1,11 @@
 ﻿using Microsoft.Win32;
 using Moonpool.Models;
 using Moonpool.ViewModels.Pages;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
+using System.Text.Json;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -16,10 +19,13 @@ namespace Moonpool.Views.Pages
     {
         public DashboardViewModel ViewModel { get; }
 
+        private string imageFilePath = "";
+        public ObservableCollection<Problem> problemCollection = [];
+
         public DashboardPage(DashboardViewModel viewModel)
         {
             ViewModel = viewModel;
-            DataContext = this;
+            this.DataContext = this;
 
             InitializeComponent();
         }
@@ -68,8 +74,8 @@ namespace Moonpool.Views.Pages
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
             if (openFileDialog.ShowDialog() == true)
             {
-                string filePath = openFileDialog.FileName;
-                DisplayImageAndHash(filePath);
+                imageFilePath = openFileDialog.FileName;
+                DisplayImageAndHash(imageFilePath);
             }
         }
 
@@ -105,7 +111,30 @@ namespace Moonpool.Views.Pages
 
             Console.WriteLine($"{SubjectsComboBox.Text}");
             Console.WriteLine($"{ChaptersComboBox.Text}");
+            Console.WriteLine($"{imageFilePath}");
             Console.WriteLine($"{AnswerBox.Text}");
+
+            var problem = new Problem(
+                SubjectsComboBox.Text,
+                ChaptersComboBox.Text,
+                imageFilePath,
+                AnswerBox.Text,
+                WeightBox.Text
+                );
+
+            problemCollection.Add(problem);
+            SaveProblemCollection();
+        }
+
+        private void SaveProblemCollection()
+        {
+            var json = JsonSerializer.Serialize(problemCollection, new JsonSerializerOptions
+            {
+                WriteIndented = true // JSON 출력 포맷을 정렬된 방식으로 설정합니다.
+            });
+
+            string filePath = App.DatabasePath + "\\database.json";
+            File.WriteAllText(filePath, json);
         }
 
         private bool IsImageBoxEmpty()
@@ -118,7 +147,7 @@ namespace Moonpool.Views.Pages
 
         private void CommandSave_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !string.IsNullOrEmpty(SubjectsComboBox.Text) && !string.IsNullOrEmpty(ChaptersComboBox.Text) && !IsImageBoxEmpty() && !string.IsNullOrEmpty(AnswerBox.Text);
+            e.CanExecute = !string.IsNullOrEmpty(SubjectsComboBox.Text) && !string.IsNullOrEmpty(ChaptersComboBox.Text) && !IsImageBoxEmpty() && !string.IsNullOrEmpty(AnswerBox.Text) && !string.IsNullOrEmpty(WeightBox.Text) && decimal.TryParse(WeightBox.Text, out _);
         }
     }
 }

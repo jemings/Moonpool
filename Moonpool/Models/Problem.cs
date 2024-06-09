@@ -7,17 +7,36 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Security.Cryptography;
+using System.Text.Json.Serialization;
 
 namespace Moonpool.Models
 {
     public class Problem
     {
+        public string? subjectInfo { get; set; }
+        public string? chapterInfo { get; set; }
+        public string? imageByte { get; set; }
+        public string? imageHash { get; set; }
+        public string? answer { get; set; }
+        public decimal weight { get; set; }
+
+        public uint totalSolvedNumber { get; set; }
+
+        public uint numberOfCorrect { get; set; }
+
         public BitmapImage? image;
-        public string? answer;
-        private uint totalSolvedNumber;
-        private uint numberOfCorrect;
-        public string? imageHash;
-        public decimal weight;
+
+
+        public Problem() { }
+
+        public Problem(string subject, string chapter, string filepath, string answer, string weight)
+        {
+            subjectInfo = subject;
+            chapterInfo = chapter;
+            SetImage(filepath);
+            SetAnswer(answer);
+            SetWeight(weight);
+        }
 
         public static byte[] GetImageByte(string imagePath)
         {
@@ -32,6 +51,18 @@ namespace Moonpool.Models
             return imageBytes;
         }
 
+        private string GetImageBase64(BitmapImage image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(image));
+                encoder.Save(ms);
+                byte[] imageBytes = ms.ToArray();
+                return Convert.ToBase64String(imageBytes);
+            }
+        }
+
         public static string GetImageHash(byte[] imageBytes)
         {
             string hashString;
@@ -41,6 +72,12 @@ namespace Moonpool.Models
                 hashString = BitConverter.ToString(hashBytes).Replace("-", "");
             }
             return hashString;
+        }
+
+        public static string GetImageHash(string imageString)
+        {
+            byte[] imageBytes = Convert.FromBase64String(imageString);
+            return GetImageHash(imageBytes);
         }
 
         private static BitmapImage GetImage(byte[] imageBytes)
@@ -56,13 +93,15 @@ namespace Moonpool.Models
 
         public void SetImage(string imagePath)
         {
-            var imageBytes = GetImageByte(imagePath);
-            imageHash = GetImageHash(imageBytes);
-            image = GetImage(imageBytes);
+            image = new BitmapImage(new Uri(imagePath, UriKind.Relative));
+            imageByte = GetImageBase64(image);
+            imageHash = GetImageHash(imageByte);
         }
 
+        [JsonIgnore]
         public decimal CorrectRate => totalSolvedNumber == 0 ? 0 : (decimal)numberOfCorrect / totalSolvedNumber * 100;
 
+        [JsonIgnore]
         public decimal WeightedRate => CorrectRate * weight;
 
         public void SetAnswer(string newAnswer)
@@ -72,6 +111,16 @@ namespace Moonpool.Models
                 answer = newAnswer;
                 totalSolvedNumber = 0;
                 numberOfCorrect = 0;
+            }
+        }
+
+        public void SetWeight(string inputString)
+        {
+            decimal newWeight;
+            bool success = Decimal.TryParse(inputString, out newWeight);
+            if (success && newWeight != weight)
+            {
+                weight = newWeight;
             }
         }
 
